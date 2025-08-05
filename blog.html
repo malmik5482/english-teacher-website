@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Блог - Саликова О.А.{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="section-title">Блог</h1>
+    
+    {% if posts %}
+        {% for post in posts %}
+        <div class="card mb-4">
+            {% if post.image_path %}
+            <img src="{{ url_for('static', filename=post.image_path) }}" class="card-img-top" alt="{{ post.title }}" style="height: 300px; object-fit: cover;">
+            {% endif %}
+            <div class="card-body">
+                <h3 class="card-title">{{ post.title }}</h3>
+                <p class="card-text">{{ post.content[:300] }}{% if post.content|length > 300 %}...{% endif %}</p>
+                <small class="text-muted">Опубликовано: {{ post.created_at.strftime('%d.%m.%Y') }}</small>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="text-center">
+            <p>Пока нет записей в блоге.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

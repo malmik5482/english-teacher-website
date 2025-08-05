@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+
+{% block title %}Управление учениками{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Подключаем боковое меню -->
+        {% include 'sidebar.html' %}
+        
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">Управление учениками</h1>
+            </div>
+            
+            <!-- Вкладки -->
+            <ul class="nav nav-tabs" id="studentTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="students-tab" data-bs-toggle="tab" data-bs-target="#students" type="button" role="tab">Все ученики</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="groups-tab" data-bs-toggle="tab" data-bs-target="#groups" type="button" role="tab">Группы</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="individual-tab" data-bs-toggle="tab" data-bs-target="#individual" type="button" role="tab">Индивидуальные занятия</button>
+                </li>
+            </ul>
+            
+            <div class="tab-content" id="studentTabsContent">
+                <!-- Вкладка: Все ученики -->
+                <div class="tab-pane fade show active" id="students" role="tabpanel">
+                    <div class="card mt-3">
+                        <div class="card-header">
+                            <h5 class="card-title">Список учеников</h5>
+                        </div>
+                        <div class="card-body">
+                            {% if students %}
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Фамилия Имя</th>
+                                                <th>Email</th>
+                                                <th>Телефон</th>
+                                                <th>Дата регистрации</th>
+                                                <th>Группа</th>
+                                                <th>Действия</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for student in students %}
+                                            <tr>
+                                                <td>{{ student.last_name }} {{ student.first_name }}</td>
+                                                <td>{{ student.email }}</td>
+                                                <td>{{ student.phone }}</td>
+                                                <td>{{ student.created_at.strftime('%d.%m.%Y') }}</td>
+                                                <td>
+                                                    {% set group_member = student.group_memberships|first %}
+                                                    {% if group_member %}
+                                                        {{ group_member.group.name }}
+                                                    {% else %}
+                                                        <span class="text-muted">Нет группы</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    <a href="{{ url_for('chat_with_user', user_id=student.id) }}" class="btn btn-sm btn-outline-primary" title="Написать">
+                                                        <i class="fas fa-comment"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% else %}
+                                <p class="text-muted">Пока нет зарегистрированных учеников</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Вкладка: Группы -->
+                <div class="tab-pane fade" id="groups" role="tabpanel">
+                    <div class="card mt-3">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">Группы занятий</h5>
+                            <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#createGroupModal">
+                                <i class="fas fa-plus"></i> Создать группу
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            {% if groups %}
+                                <div class="row">
+                                    {% for group, member_count in groups %}
+                                    <div class="col-md-6 col-lg-4 mb-3">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h5 class="card-title">{{ group.name }}</h5>
+                                                <p class="card-text">{{ group.description or 'Без описания' }}</p>
+                                                <p class="card-text"><small class="text-muted">Участников: {{ member_count }}</small></p>
+                                                <a href="{{ url_for('view_group', group_id=group.id) }}" class="btn btn-primary btn-sm">Открыть</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <p class="text-muted">Пока нет созданных групп</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Вкладка: Индивидуальные занятия -->
+                <div class="tab-pane fade" id="individual" role="tabpanel">
+                    <div class="card mt-3">
+                        <div class="card-header">
+                            <h5 class="card-title">Индивидуальные занятия</h5>
+                        </div>
+                        <div class="card-body">
+                            {% if individual_groups %}
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Ученик</th>
+                                                <th>Дата создания</th>
+                                                <th>Действия</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for group in individual_groups %}
+                                                {% set student = group.members[0].user if group.members else none %}
+                                                {% if student %}
+                                                <tr>
+                                                    <td>{{ student.last_name }} {{ student.first_name }}</td>
+                                                    <td>{{ group.created_at.strftime('%d.%m.%Y') }}</td>
+                                                    <td>
+                                                        <a href="{{ url_for('view_group', group_id=group.id) }}" class="btn btn-sm btn-primary">Открыть</a>
+                                                    </td>
+                                                </tr>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% else %}
+                                <p class="text-muted">Пока нет индивидуальных занятий</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- Модальное окно создания группы -->
+<div class="modal fade" id="createGroupModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Создать новую группу</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="POST" action="{{ url_for('create_group') }}">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="groupName" class="form-label">Название группы</label>
+                        <input type="text" class="form-control" id="groupName" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="groupDescription" class="form-label">Описание (необязательно)</label>
+                        <textarea class="form-control" id="groupDescription" name="description" rows="3"></textarea>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="isIndividual" name="is_individual">
+                        <label class="form-check-label" for="isIndividual">
+                            Индивидуальные занятия
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="submit" class="btn btn-primary">Создать</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

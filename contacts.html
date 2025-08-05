@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Контакты - Саликова О.А.{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="section-title">Контакты</h1>
+    
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="contact-card">
+                <div class="text-center mb-4">
+                    <div class="contact-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h4>Адрес</h4>
+                    <p>г. [Ваш город], [Ваш адрес]</p>
+                </div>
+                
+                <div class="text-center mb-4">
+                    <div class="contact-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <h4>Телефон</h4>
+                    <p>+7 (XXX) XXX-XXXX</p>
+                </div>
+                
+                <div class="text-center mb-4">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <h4>Email</h4>
+                    <p>olga.salykova@email.com</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="contact-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h4>Режим работы</h4>
+                    <p>Пн-Пт: 9:00 - 18:00<br>Сб: 10:00 - 14:00<br>Вс: выходной</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="contact-card">
+                <h3 class="mb-4">Записаться на занятие</h3>
+                <form>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Ваше имя</label>
+                        <input type="text" class="form-control" id="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Телефон</label>
+                        <input type="tel" class="form-control" id="phone" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email">
+                    </div>
+                    <div class="mb-3">
+                        <label for="age" class="form-label">Возраст ребенка</label>
+                        <input type="text" class="form-control" id="age">
+                    </div>
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Сообщение</label>
+                        <textarea class="form-control" id="message" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-paper-plane me-2"></i>Отправить заявку
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Социальные сети -->
+    <div class="text-center mt-5">
+        <h3 class="mb-4">Мы в социальных сетях</h3>
+        <div class="mb-4">
+            <a href="#" class="social-icon">
+                <i class="fab fa-telegram"></i>
+            </a>
+            <a href="#" class="social-icon">
+                <i class="fab fa-vk"></i>
+            </a>
+            <a href="#" class="social-icon">
+                <i class="fab fa-whatsapp"></i>
+            </a>
+        </div>
+        <p class="text-muted">Подписывайтесь на наши социальные сети для получения полезных материалов и новостей</p>
+    </div>
+</div>
+{% endblock %}

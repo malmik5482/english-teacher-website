@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+
+{% block title %}Управление контентом - Саликова О.А.{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="section-title">Управление контентом сайта</h1>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ 'danger' if category == 'error' else 'success' if category == 'success' else 'info' }} alert-dismissible fade show">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="nav nav-tabs" id="contentTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="main-tab" data-bs-toggle="tab" data-bs-target="#main" type="button" role="tab">Главная страница</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="services-tab" data-bs-toggle="tab" data-bs-target="#services" type="tab" role="tab">Услуги</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="contacts-tab" data-bs-toggle="tab" data-bs-target="#contacts" type="button" role="tab">Контакты</button>
+                </li>
+            </ul>
+            
+            <div class="tab-content mt-4" id="contentTabContent">
+                <!-- Главная страница -->
+                <div class="tab-pane fade show active" id="main" role="tabpanel">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Контент главной страницы</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-4">
+                                <h6>Герой секция</h6>
+                                <div class="mb-3">
+                                    <label class="form-label">Заголовок</label>
+                                    <textarea class="form-control content-editor" 
+                                              data-page="index" 
+                                              data-section="hero" 
+                                              data-key="title" 
+                                              rows="2">{{ content_data.get('index_hero_title', 'Английский язык для детей') }}</textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Подзаголовок</label>
+                                    <textarea class="form-control content-editor" 
+                                              data-page="index" 
+                                              data-section="hero" 
+                                              data-key="subtitle" 
+                                              rows="2">{{ content_data.get('index_hero_subtitle', 'Индивидуальные занятия с опытным преподавателем') }}</textarea>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <h6>О преподавателе</h6>
+                                <div class="mb-3">
+                                    <label class="form-label">Текст о преподавателе</label>
+                                    <textarea class="form-control content-editor" 
+                                              data-page="index" 
+                                              data-section="about" 
+                                              data-key="text" 
+                                              rows="5">{{ content_data.get('index_about_text', '') }}</textarea>
+                                </div>
+                            </div>
+                            
+                            <button type="button" class="btn btn-primary save-all-content">
+                                <i class="fas fa-save me-2"></i>Сохранить все изменения
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Услуги -->
+                <div class="tab-pane fade" id="services" role="tabpanel">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Контент страницы услуг</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle me-2"></i>
+                                Управление услугами осуществляется через отдельный раздел (в разработке)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Контакты -->
+                <div class="tab-pane fade" id="contacts" role="tabpanel">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Контент страницы контактов</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle me-2"></i>
+                                Управление контактной информацией осуществляется через отдельный раздел (в разработке)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="text-center mt-4">
+        <a href="{{ url_for('admin_panel') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Назад в админ панель
+        </a>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Сохранение контента
+    document.querySelectorAll('.content-editor').forEach(editor => {
+        editor.addEventListener('blur', function() {
+            const pageName = this.dataset.page;
+            const sectionName = this.dataset.section;
+            const contentKey = this.dataset.key;
+            const contentValue = this.value;
+            
+            saveContent(pageName, sectionName, contentKey, contentValue);
+        });
+    });
+    
+    // Сохранение всех изменений
+    document.querySelector('.save-all-content')?.addEventListener('click', function() {
+        let savedCount = 0;
+        const editors = document.querySelectorAll('.content-editor');
+        
+        editors.forEach(editor => {
+            const pageName = editor.dataset.page;
+            const sectionName = editor.dataset.section;
+            const contentKey = editor.dataset.key;
+            const contentValue = editor.value;
+            
+            saveContent(pageName, sectionName, contentKey, contentValue).then(() => {
+                savedCount++;
+                if (savedCount === editors.length) {
+                    alert('Все изменения сохранены!');
+                }
+            });
+        });
+    });
+    
+    // Функция сохранения контента
+    function saveContent(pageName, sectionName, contentKey, contentValue) {
+        return fetch('/admin/save_content', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                page_name: pageName,
+                section_name: sectionName,
+                content_key: contentKey,
+                content_value: contentValue
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                console.error('Ошибка сохранения:', data.error);
+                alert('Ошибка сохранения: ' + data.error);
+            } else {
+                console.log('Контент сохранен:', data.success);
+            }
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+            alert('Ошибка сохранения контента');
+        });
+    }
+});
+</script>
+{% endblock %}

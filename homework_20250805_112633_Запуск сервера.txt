@@ -1,0 +1,22 @@
+Запуск сервера 
+
+source venv/bin/activate
+python app.py
+
+Переход в папку проекта
+cd ~/english_teacher_site
+
+
+1. Проверьте статус сервиса:
+
+./start_all.sh
+
+
+2. Для просмотра логов в реальном времени:
+
+./monitor_site.sh
+
+
+3. Для остановки сервиса:
+
+./stop_all.sh

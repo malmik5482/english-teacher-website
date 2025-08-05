@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Чат{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Подключаем боковое меню -->
+        {% include 'sidebar.html' %}
+        
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">Чат</h1>
+            </div>
+
+            {% if chats %}
+                <div class="row">
+                    {% for chat_user in chats %}
+                    <div class="col-md-6 col-lg-4 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ chat_user.first_name }} {{ chat_user.last_name }}</h5>
+                                <p class="card-text">{{ chat_user.email }}</p>
+                                {% set unread_count = unread_counts[chat_user.id] %}
+                                {% if unread_count and unread_count > 0 %}
+                                    <span class="badge bg-danger">{{ unread_count }} непрочитанных</span>
+                                {% endif %}
+                                <a href="{{ url_for('chat_with_user', user_id=chat_user.id) }}" class="btn btn-primary">Открыть чат</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="alert alert-info" role="alert">
+                    У вас пока нет диалогов. Напишите кому-нибудь!
+                </div>
+            {% endif %}
+        </main>
+    </div>
+</div>
+{% endblock %}

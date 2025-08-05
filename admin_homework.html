@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block title %}Домашние задания преподавателя{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Подключаем боковое меню -->
+        {% include 'sidebar.html' %}
+        
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">Домашние задания преподавателя</h1>
+                <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#createHomeworkModal">
+                    <i class="fas fa-plus"></i> Создать задание
+                </button>
+            </div>
+
+            {% if homeworks %}
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Название</th>
+                                <th>Описание</th>
+                                <th>Срок сдачи</th>
+                                <th>Назначено</th>
+                                <th>Дата создания</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for homework in homeworks %}
+                            <tr>
+                                <td>{{ homework.title }}</td>
+                                <td>{{ homework.description or 'Без описания' }}</td>
+                                <td>
+                                    {% if homework.deadline %}
+                                        {{ homework.deadline.strftime('%d.%m.%Y %H:%M') }}
+                                    {% else %}
+                                        Без срока
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if homework.student %}
+                                        Ученик: {{ homework.student.first_name }} {{ homework.student.last_name }}
+                                    {% elif homework.group %}
+                                        Группа: {{ homework.group.name }}
+                                    {% else %}
+                                        Без назначения
+                                    {% endif %}
+                                </td>
+                                <td>{{ homework.created_at.strftime('%d.%m.%Y %H:%M') }}</td>
+                                <td>
+                                    <a href="{{ url_for('delete_homework', homework_id=homework.id) }}" 
+                                       class="btn btn-sm btn-outline-danger"
+                                       onclick="return confirm('Вы уверены, что хотите удалить это домашнее задание?')">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="alert alert-info" role="alert">
+                    Пока нет созданных домашних заданий.
+                </div>
+            {% endif %}
+        </main>
+    </div>
+</div>
+
+<!-- Модальное окно создания домашнего задания -->
+<div class="modal fade" id="createHomeworkModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Создать новое домашнее задание</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="POST" action="{{ url_for('create_homework') }}" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="homeworkTitle" class="form-label">Название задания</label>
+                            <input type="text" class="form-control" id="homeworkTitle" name="title" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="homeworkGroup" class="form-label">Группа или ученик</label>
+                            <select class="form-select" id="homeworkGroup" name="group_id">
+                                <option value="">Без назначения</option>
+                                <optgroup label="Группы">
+                                    {% for group in groups %}
+                                        <option value="{{ group.id }}">Группа: {{ group.name }}</option>
+                                    {% endfor %}
+                                </optgroup>
+                                <optgroup label="Ученики">
+                                    {% for student in students %}
+                                        <option value="{{ student.id }}">Ученик: {{ student.last_name }} {{ student.first_name }}</option>
+                                    {% endfor %}
+                                </optgroup>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="homeworkDeadline" class="form-label">Срок сдачи (необязательно)</label>
+                            <input type="datetime-local" class="form-control" id="homeworkDeadline" name="deadline">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="homeworkSchedule" class="form-label">Связать с расписанием (необязательно)</label>
+                            <select class="form-select" id="homeworkSchedule" name="schedule_id">
+                                <option value="">Не связано</option>
+                                {% for schedule in schedules %}
+                                    <option value="{{ schedule.id }}">
+                                        {{ schedule.title }} - {{ schedule.start_time.strftime('%d.%m.%Y %H:%M') }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="homeworkDescription" class="form-label">Описание (необязательно)</label>
+                        <textarea class="form-control" id="homeworkDescription" name="description" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="homeworkFiles" class="form-label">Файлы (необязательно)</label>
+                        <input type="file" class="form-control" id="homeworkFiles" name="files" multiple>
+                        <div class="form-text">Можно загрузить несколько файлов (изображения, документы)</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="submit" class="btn btn-primary">Создать задание</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

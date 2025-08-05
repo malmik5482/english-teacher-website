@@ -1,0 +1,34 @@
+english_teacher_site/
+├── venv/                          # Виртуальное окружение Python
+├── static/                        # Статические файлы
+│   ├── css/                       # CSS стили
+│   ├── js/                        # JavaScript скрипты
+│   ├── images/                    # Изображения сайта
+│   └── uploads/                   # Загруженные файлы пользователей
+├── templates/                     # HTML шаблоны
+│   ├── base.html                  # Базовый шаблон
+│   ├── index.html                 # Главная страница
+│   ├── services.html              # Услуги
+│   ├── contacts.html              # Контакты
+│   ├── blog.html                  # Блог
+│   ├── register.html              # Регистрация
+│   ├── login.html                 # Вход
+│   ├── dashboard.html             # Личный кабинет
+│   ├── admin_panel.html           # Админ панель
+│   ├── admin_students.html        # Управление учениками
+│   ├── admin_groups.html          # Управление группами
+│   ├── admin_schedule.html        # Расписание
+│   ├── admin_homework.html        # Домашние задания
+│   ├── admin_applications.html    # Заявки на обучение
+│   ├── admin_content.html         # Контент сайта
+│   ├── admin_blog.html            # Блог (админ)
+│   ├── edit_blog_post.html        # Редактирование поста
+│   ├── student_group.html         # Группа ученика
+│   ├── student_schedule.html       # Расписание ученика
+│   ├── student_homework.html      # Домашние задания ученика
+│   ├── chat.html                  # Чаты
+│   └── chat_room.html             # Чат с пользователем
+├── app.py                         # Основной файл приложения Flask
+├── requirements.txt               # Зависимости Python
+├── english_teacher.db              # База данных SQLite
+└── backups/                       # Резервные копии

@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block title %}Группа: {{ group.name }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Подключаем боковое меню -->
+        {% include 'sidebar.html' %}
+        
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">Группа: {{ group.name }}</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#addMembersModal">
+                        <i class="fas fa-user-plus"></i> Добавить участников
+                    </button>
+                </div>
+            </div>
+
+            <!-- Описание группы -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title">Описание группы</h5>
+                </div>
+                <div class="card-body">
+                    {% if group.description %}
+                        <p class="card-text">{{ group.description }}</p>
+                    {% else %}
+                        <p class="card-text text-muted">Описание отсутствует</p>
+                    {% endif %}
+                    <small class="text-muted">Создана: {{ group.created_at.strftime('%d.%m.%Y %H:%M') }}</small>
+                </div>
+            </div>
+
+            <!-- Список участников -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Участники группы ({{ members|length }})</h5>
+                </div>
+                <div class="card-body">
+                    {% if members %}
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Фамилия Имя</th>
+                                        <th>Email</th>
+                                        <th>Телефон</th>
+                                        <th>Дата добавления</th>
+                                        <th>Действия</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for member in members %}
+                                    <tr>
+                                        <td>{{ member.user.last_name }} {{ member.user.first_name }}</td>
+                                        <td>{{ member.user.email }}</td>
+                                        <td>{{ member.user.phone }}</td>
+                                        <td>{{ member.joined_at.strftime('%d.%m.%Y') }}</td>
+                                        <td>
+                                            <a href="{{ url_for('chat_with_user', user_id=member.user.id) }}" class="btn btn-sm btn-outline-primary" title="Написать">
+                                                <i class="fas fa-comment"></i>
+                                            </a>
+                                            <a href="{{ url_for('remove_group_member', group_id=group.id, member_id=member.id) }}" 
+                                               class="btn btn-sm btn-outline-danger" 
+                                               title="Удалить из группы"
+                                               onclick="return confirm('Вы уверены, что хотите удалить этого участника из группы?')">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-muted">В группе пока нет участников</p>
+                    {% endif %}
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- Модальное окно для добавления участников -->
+<div class="modal fade" id="addMembersModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Добавить участников в группу "{{ group.name }}"</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST" action="{{ url_for('admin_students') }}">
+                <input type="hidden" name="group_id" value="{{ group.id }}">
+                <div class="modal-body">
+                    {% if all_students %}
+                        <div class="mb-3">
+                            <label class="form-label">Выберите учеников для добавления:</label>
+                            <div class="row">
+                                {% for student in all_students %}
+                                    <!-- Проверяем, не является ли студент уже участником группы -->
+                                    {% set is_member = false %}
+                                    {% for member in members %}
+                                        {% if member.user_id == student.id %}
+                                            {% set is_member = true %}
+                                        {% endif %}
+                                    {% endfor %}
+                                    
+                                    {% if not is_member %}
+                                    <div class="col-md-6 mb-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="student_ids" value="{{ student.id }}" id="student_{{ student.id }}">
+                                            <label class="form-check-label" for="student_{{ student.id }}">
+                                                {{ student.last_name }} {{ student.first_name }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% else %}
+                        <p class="text-muted">Нет доступных учеников для добавления</p>
+                    {% endif %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    {% if all_students %}
+                        <button type="submit" class="btn btn-primary">Добавить выбранных участников</button>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

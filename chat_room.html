@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Чат с {{ user.first_name }} {{ user.last_name }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Подключаем боковое меню -->
+        {% include 'sidebar.html' %}
+        
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">Чат с {{ user.first_name }} {{ user.last_name }}</h1>
+                <a href="{{ url_for('chat') }}" class="btn btn-sm btn-outline-secondary">
+                    <i class="fas fa-arrow-left"></i> Назад к списку
+                </a>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Диалог</h5>
+                </div>
+                <div class="card-body">
+                    {% if messages %}
+                        <div class="chat-messages mb-3" id="chatMessages" style="height: 400px; overflow-y: auto; border: 1px solid #dee2e6; padding: 15px;">
+                            {% for message in messages %}
+                            <div class="mb-3 {% if message.sender_id == current_user.id %}text-end{% endif %}">
+                                <div class="d-inline-block {% if message.sender_id == current_user.id %}bg-primary text-white{% else %}bg-light{% endif %}" 
+                                     style="padding: 10px; border-radius: 10px; max-width: 70%;">
+                                    <div class="fw-bold">{{ message.sender_name }}</div>
+                                    <div>{{ message.content }}</div>
+                                    <small class="text-muted">{{ message.created_at.strftime('%d.%m.%Y %H:%M') }}</small>
+                                    
+                                    {% if message.files %}
+                                        <div class="mt-2">
+                                            {% for file in message.files %}
+                                                <div>
+                                                    <a href="/{{ file.file_path }}" target="_blank" class="text-white">
+                                                        <i class="fas fa-file"></i> {{ file.filename }}
+                                                    </a>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted">Нет сообщений в этом диалоге.</p>
+                    {% endif %}
+                    
+                    <form method="POST" action="{{ url_for('send_message') }}" enctype="multipart/form-data" id="messageForm">
+                        <input type="hidden" name="recipient_id" value="{{ user.id }}">
+                        <div class="row">
+                            <div class="col-md-9 mb-2">
+                                <textarea class="form-control" id="messageContent" name="content" rows="2" placeholder="Введите сообщение..."></textarea>
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <input type="file" class="form-control" id="messageFiles" name="files" multiple>
+                                <div class="form-text">Файлы (необязательно)</div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Отправить</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script>
+    // Прокрутка чата вниз при загрузке страницы
+    document.addEventListener('DOMContentLoaded', function() {
+        var chatMessages = document.getElementById('chatMessages');
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    });
+</script>
+{% endblock %}

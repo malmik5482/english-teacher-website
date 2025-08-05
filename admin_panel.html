@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}Админ панель{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Подключаем боковое меню -->
+        {% include 'sidebar.html' %}
+        
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">Админ панель</h1>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card text-white bg-primary">
+                        <div class="card-header">Ученики</div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ users|selectattr('is_teacher', 'equalto', False)|list|length }}</h5>
+                            <p class="card-text">Зарегистрировано учеников</p>
+                            <a href="{{ url_for('admin_students') }}" class="btn btn-light btn-sm">Управление</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="card text-white bg-success">
+                        <div class="card-header">Посты в блоге</div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ posts|length }}</h5>
+                            <p class="card-text">Опубликовано постов</p>
+                            <a href="{{ url_for('admin_blog') }}" class="btn btn-light btn-sm">Управление</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="card text-white bg-info">
+                        <div class="card-header">Заявки</div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ applications_count or 0 }}</h5>
+                            <p class="card-text">Новых заявок</p>
+                            <a href="{{ url_for('admin_applications') }}" class="btn btn-light btn-sm">Просмотр</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">Быстрые действия</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3 mb-3">
+                                    <a href="{{ url_for('admin_students') }}" class="btn btn-outline-primary w-100">
+                                        <i class="fas fa-users"></i> Ученики
+                                    </a>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <a href="{{ url_for('admin_groups') }}" class="btn btn-outline-secondary w-100">
+                                        <i class="fas fa-users-cog"></i> Группы
+                                    </a>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <a href="{{ url_for('admin_schedule') }}" class="btn btn-outline-success w-100">
+                                        <i class="fas fa-calendar-alt"></i> Расписание
+                                    </a>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <a href="{{ url_for('admin_homework') }}" class="btn btn-outline-info w-100">
+                                        <i class="fas fa-book-open"></i> Д/З
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-3 mb-3">
+                                    <a href="{{ url_for('admin_content') }}" class="btn btn-outline-warning w-100">
+                                        <i class="fas fa-edit"></i> Контент
+                                    </a>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <a href="{{ url_for('admin_blog') }}" class="btn btn-outline-danger w-100">
+                                        <i class="fas fa-blog"></i> Блог
+                                    </a>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <a href="{{ url_for('admin_applications') }}" class="btn btn-outline-dark w-100">
+                                        <i class="fas fa-file-contract"></i> Заявки
+                                    </a>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <a href="{{ url_for('edit_blog_post') }}" class="btn btn-outline-secondary w-100">
+                                        <i class="fas fa-plus"></i> Новый пост
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock %}

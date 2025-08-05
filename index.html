@@ -1,0 +1,242 @@
+
+{% extends "base.html" %}
+
+{% block title %}Главная - Сайт преподавателя английского языка{% endblock %}
+
+{% block content %}
+<!-- Герой-секция -->
+<section class="py-5 py-lg-7 bg-primary text-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8 mb-4 mb-lg-0">
+                <h1 class="display-4 fw-bold mb-3">{{ hero_title }}</h1>
+                <p class="lead mb-4">{{ hero_subtitle }}</p>
+                <a href="{{ url_for('contacts') }}" class="btn btn-light btn-lg">
+                    <i class="fas fa-paper-plane me-2"></i>Записаться на занятие
+                </a>
+            </div>
+            <div class="col-lg-4 text-center text-lg-end">
+                <div class="bg-white bg-opacity-20 p-4 rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 200px; height: 200px;">
+                    <i class="fas fa-graduation-cap fa-4x"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- О нас -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="bg-white p-4 rounded shadow h-100 d-flex flex-column">
+                    <h2 class="fw-bold mb-4">О преподавателе</h2>
+                    <div class="about-text flex-grow-1">
+                        {{ about_text|safe }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="bg-white p-4 rounded shadow h-100">
+                    <h3 class="fw-bold mb-4">Почему выбирают меня?</h3>
+                    <div class="d-flex mb-3">
+                        <div class="flex-shrink-0 text-primary">
+                            <i class="fas fa-check-circle fa-2x"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h5 class="mt-0">Индивидуальный подход</h5>
+                            <p class="mb-0">Каждый ученик получает программу, соответствующую его уровню и целям.</p>
+                        </div>
+                    </div>
+                    <div class="d-flex mb-3">
+                        <div class="flex-shrink-0 text-primary">
+                            <i class="fas fa-check-circle fa-2x"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h5 class="mt-0">Игровая форма обучения</h5>
+                            <p class="mb-0">Занятия проходят в увлекательной форме, что делает процесс обучения эффективным.</p>
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <div class="flex-shrink-0 text-primary">
+                            <i class="fas fa-check-circle fa-2x"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h5 class="mt-0">Более 8 лет опыта</h5>
+                            <p class="mb-0">Огромный опыт работы с детьми и взрослыми.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Услуги -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Наши услуги</h2>
+            <p class="text-muted">Выберите подходящий формат обучения для себя или своего ребенка</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 service-card border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-3">
+                            <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                                <i class="fas fa-child text-primary fs-2"></i>
+                            </div>
+                        </div>
+                        <h5 class="card-title">Дети 5-10 лет</h5>
+                        <p class="card-text">Игровая форма обучения, развитие говорения и понимания на слух.</p>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 text-center pb-4">
+                        <a href="{{ url_for('services') }}#kids" class="btn btn-outline-primary">Подробнее</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 service-card border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-3">
+                            <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                                <i class="fas fa-user-friends text-primary fs-2"></i>
+                            </div>
+                        </div>
+                        <h5 class="card-title">Подростки 11-17 лет</h5>
+                        <p class="card-text">Подготовка к экзаменам, развитие письма и грамматики.</p>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 text-center pb-4">
+                        <a href="{{ url_for('services') }}#teens" class="btn btn-outline-primary">Подробнее</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 service-card border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-3">
+                            <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                                <i class="fas fa-user-tie text-primary fs-2"></i>
+                            </div>
+                        </div>
+                        <h5 class="card-title">Взрослые</h5>
+                        <p class="card-text">Бизнес-английский, подготовка к международным экзаменам.</p>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 text-center pb-4">
+                        <a href="{{ url_for('services') }}#adults" class="btn btn-outline-primary">Подробнее</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Отзывы -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Отзывы учеников</h2>
+            <p class="text-muted">Что говорят наши ученики и их родители</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-secondary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                                <i class="fas fa-user text-secondary"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0">Анна Петрова</h6>
+                                <small class="text-muted">Мама ученика 8 лет</small>
+                            </div>
+                        </div>
+                        <p class="card-text">"Ольга Александровна нашла подход к моему сыну с первого занятия. Он теперь с удовольствием занимается английским!"</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-secondary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                                <i class="fas fa-user text-secondary"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0">Михаил Сидоров</h6>
+                                <small class="text-muted">Ученик 15 лет</small>
+                            </div>
+                        </div>
+                        <p class="card-text">"Занятия проходят в непринужденной обстановке, но при этом мы реально прогрессируем. Спасибо за интересные уроки!"</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-secondary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                                <i class="fas fa-user text-secondary"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0">Елена Козлова</h6>
+                                <small class="text-muted">Взрослая ученица</small>
+                            </div>
+                        </div>
+                        <p class="card-text">"После года занятий с Ольгой Александровной я уверенно прошла собеседование в международной компании. Рекомендую!"</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Контакты -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Свяжитесь со мной</h2>
+            <p class="text-muted">У вас остались вопросы? Напишите мне!</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                <i class="fas fa-envelope text-primary fs-3"></i>
+                            </div>
+                        </div>
+                        <h5>Email</h5>
+                        <p class="mb-0">sal-olga@mail.ru</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                <i class="fas fa-phone text-primary fs-3"></i>
+                            </div>
+                        </div>
+                        <h5>Телефон</h5>
+                        <p class="mb-0">+7 (999) 123-45-67</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-4">
+            <a href="{{ url_for('contacts') }}" class="btn btn-primary btn-lg">
+                <i class="fas fa-address-book me-2"></i>Форма обратной связи
+            </a>
+            <a href="{{ url_for('blog') }}" class="btn btn-outline-primary btn-lg ms-2">
+                <i class="fas fa-blog me-2"></i>Читать блог
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+```
+Сохраните файл (`Ctrl+O`, `Enter`, затем `Ctrl+X`).

@@ -1,0 +1,87 @@
+<!-- templates/sidebar.html -->
+<div class="col-md-3 col-lg-2 d-md-block bg-white sidebar collapse" id="sidebarMenu">
+    <div class="position-sticky pt-3 sidebar-sticky">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link {{ 'active' if request.endpoint == 'dashboard' }}" href="{{ url_for('dashboard') }}">
+                    <i class="fas fa-home"></i> Главная
+                </a>
+            </li>
+            
+            {% if current_user.is_teacher %}
+                <!-- Меню преподавателя -->
+                <li class="sidebar-heading">Преподаватель</li>
+                <li class="nav-item">
+                    <a class="nav-link {{ 'active' if request.endpoint in ['admin_panel', 'admin_students', 'admin_groups', 'view_group'] }}" href="{{ url_for('admin_panel') }}">
+                        <i class="fas fa-users"></i> Ученики и группы
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ 'active' if request.endpoint in ['admin_schedule', 'create_schedule_event', 'delete_schedule_event'] }}" href="{{ url_for('admin_schedule') }}">
+                        <i class="fas fa-calendar-alt"></i> Расписание
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ 'active' if request.endpoint in ['admin_homework', 'create_homework', 'delete_homework', 'update_student_homework_status'] }}" href="{{ url_for('admin_homework') }}">
+                        <i class="fas fa-book-open"></i> Домашние задания
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ 'active' if request.endpoint in ['admin_content', 'save_content'] }}" href="{{ url_for('admin_content') }}">
+                        <i class="fas fa-edit"></i> Контент сайта
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ 'active' if request.endpoint in ['admin_blog', 'edit_blog_post', 'delete_blog_post'] }}" href="{{ url_for('admin_blog') }}">
+                        <i class="fas fa-blog"></i> Блог
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ 'active' if request.endpoint in ['admin_applications', 'change_application_status'] }}" href="{{ url_for('admin_applications') }}">
+                        <i class="fas fa-file-contract"></i> Заявки
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ 'active' if request.endpoint in ['edit_user', 'delete_user'] }}" href="{{ url_for('admin_panel') }}">
+                        <i class="fas fa-user-cog"></i> Управление пользователями
+                    </a>
+                </li>
+            {% else %}
+                <!-- Меню ученика -->
+                <li class="sidebar-heading">Ученик</li>
+                <li class="nav-item">
+                    <a class="nav-link {{ 'active' if request.endpoint == 'student_schedule' }}" href="{{ url_for('student_schedule') }}">
+                        <i class="fas fa-calendar-alt"></i> Расписание
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ 'active' if request.endpoint in ['student_homework', 'view_student_homework', 'update_my_homework_status', 'upload_student_homework_file', 'delete_student_homework_file'] }}" href="{{ url_for('student_homework') }}">
+                        <i class="fas fa-book-open"></i> Домашние задания
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ 'active' if request.endpoint in ['student_group', 'view_group'] }}" href="{{ url_for('student_group') }}">
+                        <i class="fas fa-users"></i> Моя группа
+                    </a>
+                </li>
+            {% endif %}
+            
+            <li class="sidebar-heading">Общение</li>
+            <li class="nav-item">
+                <a class="nav-link {{ 'active' if request.endpoint in ['chat', 'chat_with_user', 'send_message'] }}" href="{{ url_for('chat') }}">
+                    <i class="fas fa-comments"></i> Чат 
+                    {% if unread_messages_count and unread_messages_count > 0 %}
+                        <span class="badge bg-danger rounded-pill float-end">{{ unread_messages_count }}</span>
+                    {% endif %}
+                </a>
+            </li>
+            
+            <li class="sidebar-heading">Профиль</li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('logout') }}">
+                    <i class="fas fa-sign-out-alt"></i> Выход
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>

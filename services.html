@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}Услуги - Саликова О.А.{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="section-title">Наши услуги</h1>
+    
+    <div class="row">
+        {% for lesson in lessons %}
+        <div class="col-md-6">
+            <div class="card service-card h-100">
+                <div class="card-body">
+                    <h3 class="card-title">{{ lesson.title }}</h3>
+                    <p class="card-text">{{ lesson.description }}</p>
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <small class="text-muted">
+                            <i class="fas fa-users me-1"></i> {{ lesson.age }}
+                        </small>
+                        <small class="text-muted">
+                            <i class="fas fa-clock me-1"></i> {{ lesson.duration }}
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Дополнительные услуги -->
+    <div class="row mt-5">
+        <div class="col-md-4 mb-4">
+            <div class="card service-card text-center">
+                <div class="card-body">
+                    <div class="service-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <h4>Индивидуальные занятия</h4>
+                    <p>Персональный подход к каждому ученику</p>
+                    <p class="text-primary fw-bold">1500 руб./занятие</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card service-card text-center">
+                <div class="card-body">
+                    <div class="service-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h4>Групповые занятия</h4>
+                    <p>Занятия в мини-группах до 4 человек</p>
+                    <p class="text-primary fw-bold">1000 руб./занятие</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card service-card text-center">
+                <div class="card-body">
+                    <div class="service-icon">
+                        <i class="fas fa-file-certificate"></i>
+                    </div>
+                    <h4>Подготовка к экзаменам</h4>
+                    <p>Подготовка к международным экзаменам</p>
+                    <p class="text-primary fw-bold">По запросу</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Информация о занятиях -->
+    <section class="bg-light rounded p-4 mt-5">
+        <h3 class="mb-4">Как проходят занятия</h3>
+        <div class="row">
+            <div class="col-md-3 mb-3">
+                <div class="text-center">
+                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 50px; height: 50px;">
+                        <span>1</span>
+                    </div>
+                    <h5>Знакомство</h5>
+                    <p>Оценка уровня ученика</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="text-center">
+                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 50px; height: 50px;">
+                        <span>2</span>
+                    </div>
+                    <h5>Планирование</h5>
+                    <p>Составление индивидуального плана</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="text-center">
+                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 50px; height: 50px;">
+                        <span>3</span>
+                    </div>
+                    <h5>Занятия</h5>
+                    <p>Регулярные уроки по расписанию</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="text-center">
+                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 50px; height: 50px;">
+                        <span>4</span>
+                    </div>
+                    <h5>Прогресс</h5>
+                    <p>Регулярная отчетность родителям</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
